@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SohatNotebook.Configuration.Messages;
 using SohatNotebook.DataService.IConfiguration;
 using SohatNotebook.Entities.DbSet;
+using SohatNotebook.Entities.Dtos.Generic;
 using SohatNotebook.Entities.Dtos.Incoming;
 
 namespace SohatNotebook.Api.Controllers.v1;
@@ -22,7 +24,12 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetUsers()
     {
         var users = await _unitOfWork.Users.All();
-        return Ok(users);
+        var result = new PagedResult<User>
+        {
+            Content = users.ToList(),
+            ResultCount = users.Count()
+        };
+        return Ok(result);
     }
 
     // Post
@@ -53,7 +60,20 @@ public class UsersController : BaseController
     {
         var user = await _unitOfWork.Users.GetById(id);
 
-        return Ok(user);
+        var result = new Result<User>();
+
+        if (user != null)
+        {
+            result.Content = user;
+
+            return Ok(result);
+        }
+
+        result.Error = PopulateError(404,
+            ErrorMessages.Generic.ObjectNotFound,
+            ErrorMessages.Generic.UnableToProcess);
+
+        return BadRequest(result);
     }
 
 }

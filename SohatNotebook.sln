@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SohatNotebook.Entities", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SohatNotebook.Authentication", "src\SohatNotebook.Authentication\SohatNotebook.Authentication.csproj", "{9424D43A-3697-4F4E-9CB4-D1CA17055D96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SohatNotebook.Configuration", "src\SohatNotebook.Configuration\SohatNotebook.Configuration.csproj", "{A5FE4E3D-63C8-4F86-B5E5-334284DA1991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,11 +40,16 @@ Global
 		{9424D43A-3697-4F4E-9CB4-D1CA17055D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9424D43A-3697-4F4E-9CB4-D1CA17055D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9424D43A-3697-4F4E-9CB4-D1CA17055D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FE4E3D-63C8-4F86-B5E5-334284DA1991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FE4E3D-63C8-4F86-B5E5-334284DA1991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FE4E3D-63C8-4F86-B5E5-334284DA1991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FE4E3D-63C8-4F86-B5E5-334284DA1991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FFFBBB03-6558-4CC1-9BB2-6F8D82D4AAAC} = {316810A6-B26B-4F07-B0F8-DC9D80AF9D47}
 		{2606CE14-1125-4A02-88AA-20923BF0702A} = {316810A6-B26B-4F07-B0F8-DC9D80AF9D47}
 		{F4AC5FC4-FEF8-447B-9368-3020EBA2BD1E} = {316810A6-B26B-4F07-B0F8-DC9D80AF9D47}
 		{9424D43A-3697-4F4E-9CB4-D1CA17055D96} = {316810A6-B26B-4F07-B0F8-DC9D80AF9D47}
+		{A5FE4E3D-63C8-4F86-B5E5-334284DA1991} = {316810A6-B26B-4F07-B0F8-DC9D80AF9D47}
 	EndGlobalSection
 EndGlobal

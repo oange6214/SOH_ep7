@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SohatNotebook.DataService.IConfiguration;
+using SohatNotebook.Entities.Dtos.Errors;
 
 namespace SohatNotebook.Api.Controllers.v1;
 
@@ -18,5 +19,15 @@ public class BaseController : ControllerBase
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
+    }
+
+    internal Error PopulateError(int code, string message, string type)
+    {
+        return new Error()
+        {
+            Code = code,
+            Message = message,
+            Type = type
+        };
     }
 }
