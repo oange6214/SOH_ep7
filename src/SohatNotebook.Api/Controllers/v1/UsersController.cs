@@ -1,12 +1,15 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SohatNotebook.Api.Profiles;
 using SohatNotebook.Configuration.Messages;
 using SohatNotebook.DataService.IConfiguration;
 using SohatNotebook.Entities.DbSet;
 using SohatNotebook.Entities.Dtos.Generic;
 using SohatNotebook.Entities.Dtos.Incoming;
+using SohatNotebook.Entities.Dtos.Outgoing.Profile;
 
 namespace SohatNotebook.Api.Controllers.v1;
 
@@ -14,8 +17,9 @@ namespace SohatNotebook.Api.Controllers.v1;
 public class UsersController : BaseController
 {
     public UsersController(
+        IMapper mapper,
         IUnitOfWork unitOfWork,
-        UserManager<IdentityUser> userManager) : base(unitOfWork, userManager)
+        UserManager<IdentityUser> userManager) : base(mapper, unitOfWork, userManager)
     {
     }
 
@@ -34,23 +38,20 @@ public class UsersController : BaseController
 
     // Post
     [HttpPost]
-    public async Task<IActionResult> AddUser(UserDto userDto)
+    public async Task<IActionResult> AddUser(UserDto user)
     {
-        var user = new User()
-        {
-            LastName = userDto.LastName,
-            FirstName = userDto.FirstName,
-            Email = userDto.Email,
-            DateOfBirth = Convert.ToDateTime(userDto.DateOfBirth),
-            Phone = userDto.Phone,
-            Country = userDto.Country,
-            Status = 1
-        };
-        
-        await _unitOfWork.Users.Add(user);
+        var _mappedUser = _mapper.Map<User>(user);
+
+
+        await _unitOfWork.Users.Add(_mappedUser);
         await _unitOfWork.CompleteAsync();
 
-        return CreatedAtRoute("GetUser", new { id = user.Id }, user); // return a 201
+        var result = new Result<UserDto>
+        {
+            Content = user
+        };
+
+        return CreatedAtRoute("GetUser", new { id = _mappedUser.Id }, result); // return a 201
     }
 
     // Get
@@ -60,11 +61,13 @@ public class UsersController : BaseController
     {
         var user = await _unitOfWork.Users.GetById(id);
 
-        var result = new Result<User>();
+        var result = new Result<ProfileDto>();
 
         if (user != null)
         {
-            result.Content = user;
+            var mappedProfile = _mapper.Map<ProfileDto>(user);
+
+            result.Content = mappedProfile;
 
             return Ok(result);
         }
@@ -74,6 +77,6 @@ public class UsersController : BaseController
             ErrorMessages.Generic.UnableToProcess);
 
         return BadRequest(result);
-    }
+    } 
 
 }

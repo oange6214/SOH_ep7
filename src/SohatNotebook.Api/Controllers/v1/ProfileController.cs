@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using SohatNotebook.DataService.IConfiguration;
 using SohatNotebook.Entities.DbSet;
 using SohatNotebook.Entities.Dtos.Generic;
 using SohatNotebook.Entities.Dtos.Incoming.Profile;
+using SohatNotebook.Entities.Dtos.Outgoing.Profile;
 
 namespace SohatNotebook.Api.Controllers.v1;
 
@@ -14,8 +16,9 @@ namespace SohatNotebook.Api.Controllers.v1;
 public class ProfileController : BaseController
 {
     public ProfileController(
+        IMapper mapper,
         IUnitOfWork unitOfWork,
-        UserManager<IdentityUser> userManager) : base(unitOfWork, userManager)
+        UserManager<IdentityUser> userManager) : base(mapper, unitOfWork, userManager)
     {
     }
 
@@ -23,7 +26,7 @@ public class ProfileController : BaseController
     public async Task<IActionResult> GetProfile()
     {
         var loggedInUser = await _userManager.GetUserAsync(HttpContext.User);
-        var result = new Result<User>();
+        var result = new Result<ProfileDto>();
 
         if (loggedInUser == null)
         {
@@ -47,7 +50,9 @@ public class ProfileController : BaseController
             return BadRequest(result);
         }
 
-        result.Content = profile;
+        var mappedProfile = _mapper.Map<ProfileDto>(profile);
+
+        result.Content = mappedProfile;
 
         return Ok(result);
     }
@@ -55,7 +60,7 @@ public class ProfileController : BaseController
     [HttpPut]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto profile)
     {
-        var result = new Result<User>();
+        var result = new Result<ProfileDto>();
 
         // If the model is valid
         if (!ModelState.IsValid)
@@ -102,10 +107,13 @@ public class ProfileController : BaseController
         {
             await _unitOfWork.CompleteAsync();
 
-            result.Content = userProfile;
+            var mappedProfile = _mapper.Map<ProfileDto>(userProfile);
+
+            result.Content = mappedProfile;
 
             return Ok(result);
         }
+
 
         result.Error = PopulateError(500, 
             ErrorMessages.Generic.SomethingWentWrong, 
