@@ -6,6 +6,7 @@ public interface IUnitOfWork
 {
     IUsersRepository Users { get; }
     IRefreshTokensRepository RefreshTokens { get; }
+    IHealthDatasRepository HealthDatas { get; }
 
     Task CompleteAsync();
 }

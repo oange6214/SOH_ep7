@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SohatNotebook.Authentication.Models.DTO.Incoming;
 using SohatNotebook.Entities.DbSet;
 using SohatNotebook.Entities.Dtos.Incoming;
 using SohatNotebook.Entities.Dtos.Outgoing.Profile;
@@ -59,6 +60,5 @@ public class UserProfile : Profile
                 dest => dest.Phone,
                 from => from.MapFrom(x => $"{x.Phone}")
             );
-
     }
 }
